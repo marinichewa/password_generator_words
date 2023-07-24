@@ -1,6 +1,5 @@
 package controler;
-import org.example.GeneratorRules;
-import picocli.CommandLine;
+
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 

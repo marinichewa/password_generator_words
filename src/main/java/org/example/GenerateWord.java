@@ -14,35 +14,12 @@ import java.util.Random;
 public class GenerateWord  {
 
     private static final String NUMBERS = "1234567890";
-    public String generate(GenerateRules rules) {
-
-
+    public String generate(GenerateRules rules) throws FileNotFoundException {
+        String password=GeneratePassword(rules.getLength(),rules.getWordcount(),rules.getSpecial(),rules.isNumeric(), rules.isToUpperFirst());
+    return password;
     }
 
-    public StringBuilder peekChar (int length, int wordcount, char special, boolean numeric, boolean toLower) throws FileNotFoundException {
-    if (!numeric) {
-                if (special == 0) {
-                    if (!toLower) {
-
-                        StringBuilder result=new StringBuilder();
-                            while (result.length()==length) {
-                            int wordlength=new Random ().nextInt(length-wordcount+1);
-                            result.append(randomwWord(wordlength)).toString();}
-                                return result;
-                        }
-
-
-                    }
-
-
-                }
-
-
-                return null;
-
-    }
-
-    private String passwordJustWords (int length, int wordcount, char special, boolean numeric, boolean toUpperFirst)
+    private String GeneratePassword (int length, int wordcount, char special, boolean numeric, boolean toUpperFirst)
             throws FileNotFoundException {
 
         StringBuilder result = new StringBuilder();
@@ -58,7 +35,7 @@ public class GenerateWord  {
         int newLengthnum=length-countnumeric;
         while (wordcount>1) {
             newLength=newLengthnum-result.length();
-            int wordlength = new Random().nextInt(3,newLength-(wordcount-1)*3);
+            int wordlength = new Random().nextInt(minlength(),newLength-(wordcount-1)*3);
             wordcount--;
             if (!toUpperFirst) {
                 result.append(randomWord(wordlength));}
