@@ -15,9 +15,15 @@ public class GenerateWord  {
 
     private static final String NUMBERS = "1234567890";
     public String generate(GenerateRules rules) throws FileNotFoundException {
-        String password=GeneratePassword(rules.getLength(),rules.getWordcount(),rules.getSpecial(),rules.isNumeric(), rules.isToUpperFirst());
+        if (maxlength()*rules.getWordcount()< rules.getLength()) {
+            String info= "В словнику не знайдено таких довгих слів";
+            return info;
+        }
+        else {
+    String password=GeneratePassword(rules.getLength(),rules.getWordcount(),rules.getSpecial(),rules.isNumeric(),
+            rules.isToUpperFirst());
     return password;
-    }
+    }}
 
     private String GeneratePassword (int length, int wordcount, char special, boolean numeric, boolean toUpperFirst)
             throws FileNotFoundException {
@@ -56,11 +62,6 @@ public class GenerateWord  {
         }
         return result.toString();}
 
-
-
-
-
-
     public String toUpperFirst (String word) {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
@@ -74,10 +75,6 @@ public class GenerateWord  {
             }
             int numberword = new Random().nextInt(words.size());
             return words.get(numberword);
-    }
-    public  String randomwWord () throws FileNotFoundException {
-        int numberword = new Random().nextInt(allWords().size());
-        return allWords().get(numberword);
     }
 
     public  int maxlength () throws FileNotFoundException {
