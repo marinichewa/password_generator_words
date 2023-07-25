@@ -17,7 +17,7 @@ public class GenerateWord implements PasswordGenerator  {
     @Override
     public String generate (GenerateRules rules) throws FileNotFoundException {
         if ((!rules.isNumeric()) && (maxlength()*rules.getWordcount()< rules.getLength())) {
-        return "В словнику не знайдено таких довгих слів"
+        return "В словнику не знайдено таких довгих слів";
         }
         else {
     String password=GeneratePassword(rules.getLength(),rules.getWordcount(),rules.getSpecial(),rules.isNumeric(),
