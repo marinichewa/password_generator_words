@@ -7,16 +7,16 @@ import picocli.CommandLine.Option;
 
 import java.io.FileNotFoundException;
 
-@Command (name="user")
+@Command(name = "user")
 public class ConsoleController implements Runnable {
     @Option(names = "--lth", description = "Довжина пароля", required = true)
     private int length;
 
     @Option(names = {"-wc", "--count"}, description = "Задати кількість слів")
-    private int wordcount=1;
+    private int wordCount = 1;
 
     @Option(names = {"-s", "--spec"}, description = "Розділити слова символом (вказати символ)")
-    private char special=0;
+    private char special = 0;
 
     @Option(names = {"-n", "--num"}, description = "Додати цифри")
     private boolean numeric;
@@ -25,20 +25,19 @@ public class ConsoleController implements Runnable {
     private boolean toUpperFirst;
 
 
-
     @Override
     public void run() {
         validate();
         GenerateRules.GenerateRulesBuilder rulesBuilder = GenerateRules.builder()
                 .length(length)
-                .wordcount(wordcount)
+                .wordcount(wordCount)
                 .numeric(numeric)
-                .toUpperFirst (toUpperFirst);
-        if(special != 0) {
+                .toUpperFirst(toUpperFirst);
+        if (special != 0) {
             rulesBuilder.special(special);
         }
         GenerateRules rules = rulesBuilder.build();
-        GenerateWord word=new GenerateWord();
+        GenerateWord word = new GenerateWord();
         try {
             String password = word.generate(rules);
             System.out.println(password);
@@ -48,21 +47,26 @@ public class ConsoleController implements Runnable {
     }
 
     private void validate() {
-        if (length<3) {
+        if (length < 3) {
             System.out.println("Довжина пароля повинна бути мінімум 3 символи");
-            System.exit(1);}
-        if (!numeric && special==0 && length/wordcount<3) {
-            System.out.println("Довжина пароля коротка, щоб вмістити " + wordcount + " слів" );
-            System.exit(1);}
-        if (numeric && special==0 && (length-1)/wordcount<3) {
-            System.out.println("Довжина пароля коротка, щоб вмістити " + wordcount + " слів і цифри" );
-            System.exit(1);}
-        if (!numeric && special!=0 && (length-wordcount+1)/wordcount<3) {
-            System.out.println("Довжина пароля коротка, щоб вмістити " + wordcount + " слів і символи" );
-            System.exit(1);}
-        if (numeric && special!=0 && (length-wordcount)/wordcount<3) {
-            System.out.println("Довжина пароля коротка, щоб вмістити " + wordcount + " слів, символи і цифри" );
-            System.exit(1);}
+            System.exit(1);
+        }
+        if (!numeric && special == 0 && length / wordCount < 3) {
+            System.out.println("Довжина пароля коротка, щоб вмістити " + wordCount + " слів");
+            System.exit(1);
+        }
+        if (numeric && special == 0 && (length - 1) / wordCount < 3) {
+            System.out.println("Довжина пароля коротка, щоб вмістити " + wordCount + " слів і цифри");
+            System.exit(1);
+        }
+        if (!numeric && special != 0 && (length - wordCount + 1) / wordCount < 3) {
+            System.out.println("Довжина пароля коротка, щоб вмістити " + wordCount + " слів і символи");
+            System.exit(1);
+        }
+        if (numeric && special != 0 && (length - wordCount) / wordCount < 3) {
+            System.out.println("Довжина пароля коротка, щоб вмістити " + wordCount + " слів, символи і цифри");
+            System.exit(1);
+        }
 
 
     }
