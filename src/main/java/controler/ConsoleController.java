@@ -1,8 +1,7 @@
 package controler;
 
-import org.example.GenerateRules;
-import org.example.GenerateWord;
-import org.example.PasswordGenerator;
+import generate.GenerateRules;
+import generate.GenerateWord;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -35,23 +34,17 @@ public class ConsoleController implements Runnable {
                 .wordcount(wordcount)
                 .numeric(numeric)
                 .toUpperFirst (toUpperFirst);
-
         if(special != 0) {
             rulesBuilder.special(special);
         }
         GenerateRules rules = rulesBuilder.build();
-
         GenerateWord word=new GenerateWord();
-
         try {
             String password = word.generate(rules);
             System.out.println(password);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
-
     }
 
     private void validate() {
@@ -73,6 +66,4 @@ public class ConsoleController implements Runnable {
 
 
     }
-
-
 }
