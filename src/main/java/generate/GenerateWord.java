@@ -17,9 +17,9 @@ public class GenerateWord implements PasswordGenerator {
 
     private static List<String> allWords() {
         List<String> linesFile = new ArrayList<>();
-        try {
-            File dictionary = new File("src\\main\\java\\generate\\words_alpha.txt"); //TODO refactor to use Resources
-            linesFile = IOUtils.readLines(new FileReader(dictionary)); //TODO close Reader
+        File dictionary = new File("src\\main\\java\\generate\\words_alpha.txt"); //TODO refactor to use Resources
+        try (FileReader fileReader = new FileReader(dictionary)) {
+            linesFile = IOUtils.readLines(fileReader); //TODO close Reader
         } catch (IOException e) {
             e.printStackTrace();
         }
