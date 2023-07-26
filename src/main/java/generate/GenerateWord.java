@@ -1,6 +1,7 @@
 package generate;
 
 
+import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +17,12 @@ public class GenerateWord implements PasswordGenerator {
 
     private static final String NUMBERS = "1234567890";
 
+    @SneakyThrows
     private static List<String> allWords() {
         List<String> linesFile = new ArrayList<>();
-        File dictionary = new File("src\\main\\java\\generate\\words_alpha.txt"); //TODO refactor to use Resources
+        File dictionary = Paths.get(GenerateWord.class.getResource("words_alpha.txt").toURI()).toFile(); //TODO refactor to use Resources
         try (FileReader fileReader = new FileReader(dictionary)) {
             linesFile = IOUtils.readLines(fileReader); //TODO close Reader
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return linesFile;
     }
