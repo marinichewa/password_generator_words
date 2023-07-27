@@ -1,6 +1,6 @@
 package org.example;
 
-import controler.ConsoleController;
+import org.example.controle.ConsoleController;
 import picocli.CommandLine;
 
 import java.io.FileNotFoundException;
