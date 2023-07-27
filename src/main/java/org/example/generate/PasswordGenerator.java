@@ -1,4 +1,6 @@
-package generate;
+package org.example.generate;
+
+import org.example.generate.GenerateRules;
 
 import java.io.FileNotFoundException;
 

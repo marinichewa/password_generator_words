@@ -1,4 +1,4 @@
-package generate;
+package org.example.generate;
 
 
 import lombok.SneakyThrows;
@@ -8,7 +8,6 @@ import org.apache.commons.lang3.RandomUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class GenerateWord implements PasswordGenerator {
     @SneakyThrows
     private static List<String> allWords() {
         List<String> linesFile = new ArrayList<>();
-        File dictionary = Paths.get(GenerateWord.class.getResource("words_alpha.txt").toURI()).toFile(); //TODO refactor to use Resources
+        File dictionary = Paths.get(GenerateWord.class.getResource("/words_alpha.txt").toURI()).toFile(); //TODO refactor to use Resources
         try (FileReader fileReader = new FileReader(dictionary)) {
             linesFile = IOUtils.readLines(fileReader); //TODO close Reader
         }
@@ -30,7 +29,7 @@ public class GenerateWord implements PasswordGenerator {
     @Override
     public String generate(GenerateRules rules) throws FileNotFoundException {
         if ((!rules.isNumeric()) && (maxLength() * rules.getWordcount() < rules.getLength())) {
-            return "В словнику не знайдено таких довгих слів";
+            return "In dictionary not found words with this length";
         } else {
             return generatePassword(rules.getLength(), rules.getWordcount(), rules.getSpecial(), rules.isNumeric(),
                     rules.isToUpperFirst());
@@ -40,56 +39,44 @@ public class GenerateWord implements PasswordGenerator {
     private String generatePassword(int length, int wordcount, char special, boolean numeric, boolean toUpperFirst) {
         //TODO try to simplify
         StringBuilder result = new StringBuilder();
+        RandomUtils randomUtils = new RandomUtils();
         int reserve = 0;
-        if ((length - wordcount * 4 + 1) <= 1 || (length - wordcount * 3) <= 1) {
-            reserve = 1;
+        if (numeric && special != 0) {
+            reserve = randomUtils.nextInt(wordcount, length - wordcount * 3 + 1);
         }
-        if (numeric) {
-            if (special != 0) {
-                reserve = RandomUtils.nextInt(1, length - wordcount * 4 + 1);
-            } else {
-                reserve = RandomUtils.nextInt(1, length - wordcount * 3);
-            }
-        } else {
-            if (special != 0) {
-                reserve = length - wordcount * 4 - 1;
-            }
+        if (numeric && special == 0) {
+            reserve = randomUtils.nextInt(1, length - wordcount * 3 + 1);
+        }
+        if (!numeric && special != 0) {
+            reserve = wordcount - 1;
         }
         int newLength = length - reserve;
-        int freePlace;
-        int wordlength;
         while (wordcount > 1) {
-            freePlace = newLength - result.length();
-            if ((freePlace - wordcount * 3) <= 3) {
-                wordlength = 3;
-            } else {
-                wordlength = RandomUtils.nextInt(3, freePlace - wordcount * 3);
-            }
-            wordcount--;
-            if (!toUpperFirst) {
-                result.append(randomWord(wordlength));
-            } else {
-                result.append(toUpperFirst(randomWord(wordlength)));
-            }
+            int freePlace = newLength - result.length();
+            int wordlength = randomUtils.nextInt(3, freePlace - (wordcount - 1) * 3 + 1);
+            result.append(toUpperFirst(toUpperFirst, randomWord(wordlength)));
             if (special != 0) {
                 result.append(special);
+                reserve--;
+                newLength++;
             }
+            wordcount--;
         }
-        if (!toUpperFirst) {
-            result.append(randomWord(newLength - result.length()));
-        } else {
-            result.append(toUpperFirst(randomWord(newLength - result.length())));
-        }
-        while (reserve > 0) {
-            result.append(NUMBERS.charAt(RandomUtils.nextInt(0, NUMBERS.length())));
-            reserve--;
+        result.append(toUpperFirst(toUpperFirst, randomWord(newLength - result.length())));
+        while (length > result.length()) {
+            result.append(NUMBERS.charAt(randomUtils.nextInt(0, NUMBERS.length())));
         }
         return result.toString();
     }
 
-    public String toUpperFirst(String word) {
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
+    public String toUpperFirst(boolean toUpp, String word) {
+        if (!toUpp) {
+            return word;
+        } else {
+            return word.substring(0, 1).toUpperCase() + word.substring(1);
+        }
     }
+
 
     public String randomWord(int length) {
         List<String> words = new ArrayList<>();
