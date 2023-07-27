@@ -1,4 +1,4 @@
-package generate;
+package org.example.generate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class GenerateRules {
     private int length;
     private int wordcount;
     private char special;
     private boolean numeric;
     private boolean toUpperFirst;
-
-
 }
