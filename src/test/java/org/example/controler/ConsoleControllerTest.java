@@ -1,5 +1,7 @@
 package org.example.controler;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConsoleControllerTest {
