@@ -2,7 +2,6 @@ package org.example.generate;
 
 import lombok.SneakyThrows;
 import lombok.val;
-import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class GenerateWord implements PasswordGenerator {
     }
 
     @Override
-    public String generate(GenerateRules rules) throws FileNotFoundException {
+    public String generate(GenerateRules rules) {
         if ((!rules.isNumeric()) && (maxLength() * rules.getWordcount() < rules.getLength())) {
             return "In dictionary not found words with this length";
         } else {
