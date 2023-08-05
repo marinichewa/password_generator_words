@@ -3,6 +3,7 @@ package org.example.generate;
 
 import lombok.SneakyThrows;
 
+import lombok.val;
 import org.apache.commons.lang3.RandomUtils;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ public class GenerateWord implements PasswordGenerator {
 //            linesFile = IOUtils.readLines(fileReader);
 //        }
 //        return linesFile;
+
 
         return Files.lines(Paths.get(GenerateWord.class.getResource("/words_alpha.txt").toURI()).toFile().toPath())
                 .collect(Collectors.toList());
@@ -79,14 +81,19 @@ public class GenerateWord implements PasswordGenerator {
 
 
     public String randomWord(int length) {
-        List<String> words = new ArrayList<>();
-        for (String line : allWords()) {
-            if ((line.length() == length) && (line.length() > 2)) {
-                words.add(line);
-            }
-        }
-        int numberword = RandomUtils.nextInt(0, words.size());
-        return words.get(numberword);
+ //       List<String> words = new ArrayList<>();
+ //       for (String line : allWords()) {
+ //           if ((line.length() == length) && (line.length() > 2)) {
+ //               words.add(line);
+ //           }
+ //       }
+
+        val words = allWords()
+                .stream()
+                .filter(s -> s.length() == length && s.length() > 2)
+                .collect(Collectors.toList());
+        int numberWord = RandomUtils.nextInt(0, words.size());
+        return words.get(numberWord);
     }
 
     public int maxLength() {
