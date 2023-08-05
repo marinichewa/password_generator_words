@@ -2,15 +2,14 @@ package org.example.generate;
 
 
 import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomUtils;
 
-import java.io.File;
+import org.apache.commons.lang3.RandomUtils;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenerateWord implements PasswordGenerator {
 
@@ -18,12 +17,15 @@ public class GenerateWord implements PasswordGenerator {
 
     @SneakyThrows
     private static List<String> allWords() {
-        List<String> linesFile = new ArrayList<>();
-        File dictionary = Paths.get(GenerateWord.class.getResource("/words_alpha.txt").toURI()).toFile(); //TODO refactor to use Resources
-        try (FileReader fileReader = new FileReader(dictionary)) {
-            linesFile = IOUtils.readLines(fileReader); //TODO close Reader
-        }
-        return linesFile;
+//        List<String> linesFile = new ArrayList<>();
+//        File dictionary = Paths.get(GenerateWord.class.getResource("/words_alpha.txt").toURI()).toFile();
+//        try (FileReader fileReader = new FileReader(dictionary)) {
+//            linesFile = IOUtils.readLines(fileReader);
+//        }
+//        return linesFile;
+
+        return Files.lines(Paths.get(GenerateWord.class.getResource("/words_alpha.txt").toURI()).toFile().toPath())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -37,15 +39,13 @@ public class GenerateWord implements PasswordGenerator {
     }
 
     private String generatePassword(int length, int wordcount, char special, boolean numeric, boolean toUpperFirst) {
-        //TODO try to simplify
         StringBuilder result = new StringBuilder();
-        RandomUtils randomUtils = new RandomUtils();
         int reserve = 0;
         if (numeric && special != 0) {
-            reserve = randomUtils.nextInt(wordcount, length - wordcount * 3 + 1);
+            reserve = RandomUtils.nextInt(wordcount, length - wordcount * 3 + 1);
         }
         if (numeric && special == 0) {
-            reserve = randomUtils.nextInt(1, length - wordcount * 3 + 1);
+            reserve = RandomUtils.nextInt(1, length - wordcount * 3 + 1);
         }
         if (!numeric && special != 0) {
             reserve = wordcount - 1;
@@ -53,7 +53,7 @@ public class GenerateWord implements PasswordGenerator {
         int newLength = length - reserve;
         while (wordcount > 1) {
             int freePlace = newLength - result.length();
-            int wordlength = randomUtils.nextInt(3, freePlace - (wordcount - 1) * 3 + 1);
+            int wordlength = RandomUtils.nextInt(3, freePlace - (wordcount - 1) * 3 + 1);
             result.append(toUpperFirst(toUpperFirst, randomWord(wordlength)));
             if (special != 0) {
                 result.append(special);
@@ -64,7 +64,7 @@ public class GenerateWord implements PasswordGenerator {
         }
         result.append(toUpperFirst(toUpperFirst, randomWord(newLength - result.length())));
         while (length > result.length()) {
-            result.append(NUMBERS.charAt(randomUtils.nextInt(0, NUMBERS.length())));
+            result.append(NUMBERS.charAt(RandomUtils.nextInt(0, NUMBERS.length())));
         }
         return result.toString();
     }
