@@ -2,6 +2,7 @@ package org.example.controler;
 
 import org.example.generate.GenerateRules;
 import org.example.generate.GenerateWord;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -16,13 +17,14 @@ public class ConsoleController implements Runnable {
     private int wordCount = 1;
 
     @Option(names = {"-s", "--spec"}, description = "To split words some symbols (use symbol except 0)")
-    private char special = 0;
+    private char special;
 
     @Option(names = {"-n", "--num"}, description = "Use numbers")
     private boolean numeric;
 
     @Option(names = {"-u", "--upper"}, description = "Begins with a capital letter")
     private boolean toUpperFirst;
+
 
 
     @Override
@@ -75,7 +77,5 @@ public class ConsoleController implements Runnable {
             System.out.println("mast be minimum 2 words to split of symbols");
             System.exit(1);
         }
-
-
     }
 }
