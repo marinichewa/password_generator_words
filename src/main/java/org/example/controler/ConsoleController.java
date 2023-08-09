@@ -5,6 +5,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.io.PrintStream;
 import java.util.logging.Logger;
 
 @Command(name = "user")
@@ -44,35 +45,36 @@ public class ConsoleController implements Runnable {
         System.out.println(password);
 
     }
-    Logger logger = Logger.getLogger(getClass().getName());
+    PrintStream out = System.out;
+
 
     private void validate() {
         if (length < 3) {
-            logger.info("Minimal length must be 3");
+            out.println("Minimal length must be 3");
             System.exit(1);
         }
         if (wordCount < 1) {
-            logger.info("Minimal count of word must be 1");
+            out.println("Minimal count of word must be 1");
             System.exit(1);
         }
         if (!numeric && special == 0 && length / wordCount < 3) {
-            logger.info("Length of password is short for" + wordCount + " words");
+            out.println("Length of password is short for" + wordCount + " words");
             System.exit(1);
         }
         if (numeric && special == 0 && (length - 1) / wordCount < 3) {
-            logger.info("Length of password is short for " + wordCount + " words and numbers");
+            out.println("Length of password is short for " + wordCount + " words and numbers");
             System.exit(1);
         }
         if (!numeric && special != 0 && (length - wordCount + 1) / wordCount < 3) {
-            logger.info("Length of password is short for  " + wordCount + " words and symbols");
+            out.println("Length of password is short for  " + wordCount + " words and symbols");
             System.exit(1);
         }
         if (numeric && special != 0 && (length - wordCount) / wordCount < 3) {
-            logger.info("Length of password is short for  " + wordCount + " words and symbols and numbers");
+            out.println("Length of password is short for  " + wordCount + " words and symbols and numbers");
             System.exit(1);
         }
         if (wordCount == 1 && special != 0) {
-            logger.info("mast be minimum 2 words to split of symbols");
+            out.println("mast be minimum 2 words to split of symbols");
             System.exit(1);
         }
     }
